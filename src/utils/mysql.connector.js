@@ -8,7 +8,7 @@ const config = {
     database: process.env.DATABASE_NAME,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
-    // connectionlimit: 100/
+    connectionlimit: 100
 }
 const connection = mysql.createConnection(config)
 module.exports = connection

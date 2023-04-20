@@ -5,7 +5,8 @@ const dbconnection  = require('./src/utils/mysql.connector')
 // middlewares
 
 //const post = require('./src/posts/post.model')
-app.use(express.json())
+app.use(express.json());
+app.use(express.urlencoded({extended : true}));
 app.post('/clients',(req,res)  => {
     const { id, username, email} = req.body;
     const sql = `INSERT INTO clients(id,username,email) VALUES('${id}', '${username}','${email}')`;
@@ -23,13 +24,27 @@ app.post('/clients',(req,res)  => {
 
 });
 
-//app.get('/api/v1/posts', function(req,res){
-   // dbconnection.query('SELECT * FROM clients;', function(err, results) {
-     //   if(err) throw err.message
+// for deleting records //
+app.delete('/clients/:id',(req,res) =>{
+    const id = req.params.id;
+    //delete records from database using id 
+    const sql = `DELETE FROM clients WHERE id = ?`;
+    const values = [id];
+    dbconnection.query(sql,values,(error,results) => {
+        if(error){
+            console.log(error);
+        }else{
+            res.send('clients with ID ${id} deleted successfully');
+        }
+    });
+});
 
-//return res.send(results)
-  //  })
-    //
+
+  
+    
+
+
+
 
 
 
