@@ -2,21 +2,64 @@ const express = require('express')
 const app = express()
 const dbconnection  = require('./src/utils/mysql.connector')
 
-const post = require('./src/posts/post.model')
+// middlewares
 
-app.get('/api/v1', function(req,res){
-    return res.json(req.headers)
-})
+//const post = require('./src/posts/post.model')
+app.use(express.json())
+app.post('/clients',(req,res)  => {
+    const { id, username, email} = req.body;
+    const sql = `INSERT INTO clients(id,username,email) VALUES('${id}', '${username}','${email}')`;
 
-app.get('/api/v1/post', function(req,res){
-    return res.json([post])
-    
-})
+    return dbconnection.query(sql,(error, results)=>{
+        if(error) {
+            console.log('Error inserting data into clients tables:',error)
+            res.status(500).send('Error inserting data into clients table');
 
-app.listen(3000,function(){
+        }else{
+            console.log('Data inserted successfully into clients table:',results);
+            res.send('Data inserted successfully into clients tables');
+        }
+    });
+
+});
+
+//app.get('/api/v1/posts', function(req,res){
+   // dbconnection.query('SELECT * FROM clients;', function(err, results) {
+     //   if(err) throw err.message
+
+//return res.send(results)
+  //  })
+    //
+
+
+
+
+//app.delete('/api/v1/posts/:id', function(req,res){
+   // const id = req.params.id;
+
+   // dbconnection.query(`DELETE FROM user WHERE id='${id}';`, function(err, result) {
+      //  if(err) throw err.message
+
+      //  return res.json({result})
+   // })
+//
+// app.put('/api/v1/posts/:id', function(req,res){
+   /* const {id} = req.params
+
+    dbconnection.query(`DELETE FROM user WHERE id='${id}';`, function(err, result) {
+        if(err) throw err.message
+
+        return res.json({result})
+    })
+// })*/
+
+
+
+
+app.listen(3000,function(req ,res){
     console.log('SWIMMING AND CAMPSITE listening on port 3000')
     dbconnection.connect(function(err){
-        if (err) throw err
+        if (err) throw err.message
         console.log("connected to mySQL")
     })
 })
