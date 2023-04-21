@@ -32,18 +32,34 @@ app.delete('/clients/:id',(req,res) =>{
     const values = [id];
     dbconnection.query(sql,values,(error,results) => {
         if(error){
-            console.log(error);
+            console.log(error);ik
         }else{
             res.send('clients with ID ${id} deleted successfully');
         }
     });
 });
 
+// getting client//
+
+app.get('/Clients/:id',(req,res) => {
+    const id = req.params.id;
+    //retrieve message
+    const sql =     `SELECT * FROM clients WHERE id = ${id}`
+    const values = [id];
+    dbconnection.query(sql,values,(error,results) =>{
+        if(error){
+            console.log(error);
+            res.status(500).send('error retrieving message');
+         }else{
+            res.send(results);
+         }
+    });
+    
+});
+
 
   
     
-
-
 
 
 
