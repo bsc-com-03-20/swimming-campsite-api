@@ -1,9 +1,8 @@
 const post = {
     id:"",
-    creator: "",
-    comments: "",
+    username: "",
+    email: "",
     name: "",
-    imageUrl: "",
     summary:"",
 }
 module.exports = post

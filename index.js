@@ -4,7 +4,7 @@ const dbconnection  = require('./src/utils/mysql.connector')
 
 // middlewares
 
-//const post = require('./src/posts/post.model')
+const post = require('./src/posts/post.model')
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.post('/clients',(req,res)  => {
@@ -56,6 +56,47 @@ app.get('/Clients/:id',(req,res) => {
     });
     
 });
+// creating update endpoint
+app.patch('/api/vi/posts/:id', function (request, response)  {
+  const sql =`SELECT * FROM clients WHERE id = ${request.params.id} LIMIT 1`
+  return dbconnection.query(sql, function(err,rows){
+    if (err) throw err
+    const post= request.body 
+   // console.log(post)
+if (rows.length >= 1){
+  let props = []
+  props = Object.keys(post).map((key, index) => {
+    return `${key}='${post[key]}'`
+  })
+  const updateSql = `UPDATE clients SET ${props.join(',')} WHERE id=${rows[0].id}`
+  return dbconnection.query(updateSql, function(err,result){
+    if (err) throw err
+    if (result.affectedRows === 0) {
+      return response.status(404).json({
+        status:false,
+        statusCode:404,
+        message:  `Post with id ${request.params.id} does not exist`
+      })
+    }
+    return response.status(200).json({
+      status:true,
+      statusCode:200,
+      message:  'Post updated successfully'
+    })
+  })
+}
+  
+})
+})
+
+
+  
+
+
+    
+        
+    
+
 
 
   
